@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace StudentAppDesktop
 {
@@ -15,11 +13,13 @@ namespace StudentAppDesktop
             AvgScore = avgScore;
         }
 
-        public string FirstName { get; }
-        public string LastName { get; }
-        public string MiddleName { get; }
-        public ushort BirthYear { get; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string MiddleName { get; set; }
+        public ushort BirthYear { get; set; }
         public double AvgScore { get; set; }
+
+        public string FullName => $"{FirstName} {MiddleName} {LastName}";
 
         public object Clone()
         {

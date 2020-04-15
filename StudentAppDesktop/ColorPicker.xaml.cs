@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.DirectoryServices;
+using System.Windows;
 using System.Windows.Media;
 
 namespace StudentAppDesktop
@@ -24,6 +25,7 @@ namespace StudentAppDesktop
         public void OK_Click(object sender, RoutedEventArgs e)
         {
             Color = new SolidColorBrush(ColorChoose.SelectedColor.Value);
+            DialogResult = true;
             Close();
         }
 

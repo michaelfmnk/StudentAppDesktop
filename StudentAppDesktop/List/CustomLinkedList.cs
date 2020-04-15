@@ -1,4 +1,6 @@
-﻿using System;
+﻿using StudentAppDesktop.Common;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -67,7 +69,6 @@ namespace StudentAppDesktop.List
                 node = node.NextNode;
             }
         }
-
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

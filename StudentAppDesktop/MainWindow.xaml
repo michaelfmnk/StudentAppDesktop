@@ -4,19 +4,46 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudentAppDesktop"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="StudentDB" Height="450" Width="800">
+        Icon="/Icons/studens.ico"
+        ResizeMode="NoResize"
+        Title="StudentDB" Height="350" Width="650">
     <Window.CommandBindings>
         <CommandBinding Command="local:CustomCommands.ShowAbout" Executed="ShowAbout" />
+        <CommandBinding Command="local:CustomCommands.AddStudent" Executed="AddStudent" />
         <CommandBinding Command="local:CustomCommands.ChooseFontColor" Executed="ChooseFontColor" />
+        <CommandBinding Command="local:CustomCommands.ChooseFont" Executed="ChooseFont" />
+        <CommandBinding Command="local:CustomCommands.DeleteSelectedStudent" Executed="DeleteSelectedStudent" />
+        <CommandBinding Command="local:CustomCommands.DeleteAllStudents" Executed="DeleteAllStudents" />
+        <CommandBinding Command="local:CustomCommands.Close" Executed="Close" />
+        <CommandBinding Command="local:CustomCommands.EditStudent" Executed="UpdateSelectedStudent" />
     </Window.CommandBindings>
     <Window.Resources>
+
+        <Style TargetType="{x:Type TextBlock}" x:Key="TextStyle">
+            <Setter Property="Foreground" Value="{DynamicResource fontColor}"/>
+            <Setter Property="FontSize" Value="{DynamicResource fontSize}"/>
+            <Setter Property="FontWeight" Value="{DynamicResource fontBold}"/>
+            <Setter Property="FontFamily" Value="{DynamicResource fontFamily}"/>
+            <Setter Property="FontStyle" Value="{DynamicResource fontStyle}"/>
+        </Style>
+        <Style TargetType="{x:Type Control}" x:Key="ControlStyle">
+            <Setter Property="Foreground" Value="{DynamicResource fontColor}"/>
+            <Setter Property="FontSize" Value="{DynamicResource fontSize}"/>
+            <Setter Property="FontWeight" Value="{DynamicResource fontBold}"/>
+            <Setter Property="FontFamily" Value="{DynamicResource fontFamily}"/>
+            <Setter Property="FontStyle" Value="{DynamicResource fontStyle}"/>
+        </Style>
+
         <SolidColorBrush x:Key="fontColor" Color="Black"/>
         <FontStyle x:Key="fontStyle">Normal</FontStyle>
         <FontFamily x:Key="fontFamily">Calibri</FontFamily>
         <FontWeight x:Key="fontBold">Normal</FontWeight>
+        <system:Double x:Key="fontSize">14</system:Double>
     </Window.Resources>
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
@@ -30,7 +57,7 @@
         <Menu Grid.Row="0" Grid.ColumnSpan="3">
             <MenuItem Header="File">
                 <MenuItem Header="File Open"/>
-                <MenuItem Header="Exit"/>
+                <MenuItem Header="Exit" Command="local:CustomCommands.Close"/>
             </MenuItem>
             <MenuItem Header="Options">
                 <MenuItem Header="Choose Font Color" Command="local:CustomCommands.ChooseFontColor"/>
@@ -51,29 +78,22 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="10"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="1" Text="First Name" Margin="20 0" Foreground="{DynamicResource fontColor}" />
-            <TextBox Grid.Row="2" Height="20" Margin="20 0"/>
+            <TextBlock Grid.Row="1" Text="First Name" Margin="20 0" Style="{StaticResource TextStyle}"/>
+            <TextBox Grid.Row="2" Height="20" Margin="20 0" TextChanged="HightlightStudent"/>
 
-            <TextBlock Grid.Row="4" Text="Students List" Margin="20 0" Foreground="{DynamicResource fontColor}"/>
-            <ListBox Grid.Row="5" Margin="20 0" ScrollViewer.VerticalScrollBarVisibility="Visible">
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
-                <ListBoxItem>tes</ListBoxItem>
+            <TextBlock Grid.Row="4" Text="Students List" Margin="20 0" Style="{StaticResource TextStyle}" />
+            <ListBox Grid.Row="4" 
+                     Margin="21,17,19,0" 
+                     ScrollViewer.VerticalScrollBarVisibility="Visible" 
+                     ItemsSource="{Binding ObservableStudentList}"
+                     SelectedItem="{Binding SelectedStudent}" Grid.RowSpan="2">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource TextStyle}" Text="{Binding Path=FullName}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
         </Grid>
 
@@ -84,7 +104,7 @@
                 <RowDefinition Height="150"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" Text="Choosen Student" Foreground="{DynamicResource fontColor}"/>
+            <TextBlock Grid.Row="0" Text="Choosen Student" Style="{StaticResource TextStyle}"/>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
@@ -95,13 +115,11 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Button Foreground="{DynamicResource fontColor}" Grid.Column="0" Grid.Row="0" Margin="10">Add Student...</Button>
-                <Button Foreground="{DynamicResource fontColor}" Grid.Column="1" Grid.Row="0" Margin="10">Delete Current Student</Button>
-                <Button Foreground="{DynamicResource fontColor}" Grid.Column="0" Grid.Row="1" Margin="10">Delete All Students</Button>
-                <Button Foreground="{DynamicResource fontColor}" Grid.Column="1" Grid.Row="1" Margin="10">Modify Student Info</Button>
-
-                <Button Foreground="{DynamicResource fontColor}" Grid.Column="1" Grid.Row="2" Margin="10" Click="Close">Exit</Button>
-
+                <Button Style="{StaticResource ControlStyle}" Command="local:CustomCommands.AddStudent" Grid.Column="0" Grid.Row="0" Margin="10">Add Student...</Button>
+                <Button Style="{StaticResource ControlStyle}" Command="local:CustomCommands.DeleteSelectedStudent" Grid.Column="1" Grid.Row="0" Margin="10">Delete Current Student</Button>
+                <Button Style="{StaticResource ControlStyle}" Command="local:CustomCommands.DeleteAllStudents" Grid.Column="0" Grid.Row="1" Margin="10">Delete All Students</Button>
+                <Button Style="{StaticResource ControlStyle}" Command="local:CustomCommands.EditStudent" Grid.Column="1" Grid.Row="1" Margin="10">Modify Student Info</Button>
+                <Button Style="{StaticResource ControlStyle}" Command="local:CustomCommands.Close" Grid.Column="1" Grid.Row="2" Margin="10">Exit</Button>
             </Grid>
         </Grid>
 
