@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Height="135" 
         Width="308"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        FocusManager.FocusedElement="{Binding ElementName=EnityNameInput}">
     <Window.CommandBindings>
         <CommandBinding Command="local:CustomCommands.Close" Executed="Cancel_Click" />
         <CommandBinding Command="local:CustomCommands.Submit" Executed="OK_Click" />
