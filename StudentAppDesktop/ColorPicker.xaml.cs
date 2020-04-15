@@ -1,12 +1,9 @@
-﻿using System.DirectoryServices;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 
 namespace StudentAppDesktop
 {
-    /// <summary>
-    /// Interaction logic for ColorPicker.xaml
-    /// </summary>
+
     public partial class ColorPicker : Window
     {
         public SolidColorBrush Color { get; private set; }

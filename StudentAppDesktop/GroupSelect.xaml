@@ -1,0 +1,117 @@
+﻿<Window x:Class="StudentAppDesktop.GroupSelect"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentAppDesktop"
+                xmlns:system="clr-namespace:System;assembly=mscorlib"
+
+        mc:Ignorable="d"
+        Icon="/Icons/studens.ico"
+        ResizeMode="NoResize"
+        Title="University explorer" Height="350" Width="650">
+    <Window.CommandBindings>
+        <CommandBinding Command="local:CustomCommands.Close" Executed="Close" />
+        <CommandBinding Command="local:CustomCommands.Submit" Executed="Close" />
+    </Window.CommandBindings>
+    <Window.Resources>
+        <system:Boolean x:Key="CanDeleteGroup">true</system:Boolean>
+        <system:Boolean x:Key="CanDeleteFaculty">true</system:Boolean>
+        <Style TargetType="{x:Type TextBlock}" x:Key="TextStyle">
+            <Setter Property="Foreground" Value="{DynamicResource fontColor}"/>
+            <Setter Property="FontSize" Value="{DynamicResource fontSize}"/>
+            <Setter Property="FontWeight" Value="{DynamicResource fontBold}"/>
+            <Setter Property="FontFamily" Value="{DynamicResource fontFamily}"/>
+            <Setter Property="FontStyle" Value="{DynamicResource fontStyle}"/>
+        </Style>
+        <Style TargetType="{x:Type Control}" x:Key="ControlStyle">
+            <Setter Property="Foreground" Value="{DynamicResource fontColor}"/>
+            <Setter Property="FontSize" Value="{DynamicResource fontSize}"/>
+            <Setter Property="FontWeight" Value="{DynamicResource fontBold}"/>
+            <Setter Property="FontFamily" Value="{DynamicResource fontFamily}"/>
+            <Setter Property="FontStyle" Value="{DynamicResource fontStyle}"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Faculty" FontWeight="Bold" HorizontalAlignment="Center" Grid.Row="0" Style="{StaticResource TextStyle}"/>
+                <ListBox Grid.Row="1" 
+                     Margin="0,10,0,0" 
+                     ScrollViewer.VerticalScrollBarVisibility="Visible" 
+                     ItemsSource="{Binding ObservableFacultyList}"
+                     SelectedItem="{Binding SelectedFaculty}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Path=Name, Mode=OneWay}" Style="{StaticResource TextStyle}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+
+            <Grid Grid.Column="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Groups" FontWeight="Bold" HorizontalAlignment="Center" Grid.Row="0" Style="{StaticResource TextStyle}"/>
+                <ListBox Grid.Row="1" 
+                     Margin="0,10,0,0" 
+                     ScrollViewer.VerticalScrollBarVisibility="Visible" 
+                     ItemsSource="{Binding ObservableGroupList}"
+                     SelectedItem="{Binding SelectedGroup}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Path=Name, Mode=OneWay}" Style="{StaticResource TextStyle}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+            
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Style="{StaticResource ControlStyle}" Click="AddFaculty">Add Faculty</Button>
+            <Button Grid.Column="3" Style="{StaticResource ControlStyle}" Click="DeleteCurrentFaculty" IsEnabled="{DynamicResource CanDeleteFaculty}">Remove Faculty</Button>
+            <Button Grid.Column="5" Style="{StaticResource ControlStyle}" Click="AddGroup">Add Group</Button>
+            <Button Grid.Column="7" Style="{StaticResource ControlStyle}" Click="DeleteCurrentGroup" IsEnabled="{DynamicResource CanDeleteGroup}">Remove Group</Button>
+        </Grid>
+    </Grid>
+</Window>

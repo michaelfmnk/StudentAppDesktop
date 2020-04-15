@@ -18,6 +18,7 @@
         <CommandBinding Command="local:CustomCommands.DeleteAllStudents" Executed="DeleteAllStudents" />
         <CommandBinding Command="local:CustomCommands.Close" Executed="Close" />
         <CommandBinding Command="local:CustomCommands.EditStudent" Executed="UpdateSelectedStudent" />
+        <CommandBinding Command="local:CustomCommands.UniExplorer" Executed="ChooseGroup" />
     </Window.CommandBindings>
 
     <Window.Resources>
@@ -61,6 +62,7 @@
         <Menu Grid.Row="0" Grid.ColumnSpan="3">
             <MenuItem Header="File">
                 <MenuItem Header="File Open"/>
+                <MenuItem Header="University explorer" Command="local:CustomCommands.UniExplorer"/>
                 <MenuItem Header="Exit" Command="local:CustomCommands.Close"/>
             </MenuItem>
             <MenuItem Header="Options">
@@ -82,8 +84,8 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="10"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="1" Text="First Name" Margin="20 0" Style="{StaticResource TextStyle}"/>
-            <TextBox Grid.Row="2" Height="20" Margin="20 0" TextChanged="HightlightStudent"/>
+            <TextBlock Grid.Row="1" Text="Full Name" Margin="20 0" Style="{StaticResource TextStyle}"/>
+            <TextBox Grid.Row="2" Height="20" Margin="20 0" TextChanged="HightlightStudent" Style="{StaticResource ControlStyle}"/>
 
             <TextBlock Grid.Row="4" Text="Students List" Margin="20 0" Style="{StaticResource TextStyle}" />
             <ListBox Grid.Row="4" 
@@ -117,20 +119,20 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <TextBlock Visibility="{DynamicResource BannerVisibility}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" Text="Student is not selected"/>
-                <TextBlock Visibility="{DynamicResource UserInfoVisibility}" Grid.Row="1" TextTrimming="CharacterEllipsis">
+                <TextBlock Visibility="{DynamicResource BannerVisibility}" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" Text="Student is not selected"  Style="{StaticResource TextStyle}"/>
+                <TextBlock Visibility="{DynamicResource UserInfoVisibility}" Grid.Row="1" TextTrimming="CharacterEllipsis"  Style="{StaticResource TextStyle}">
                     <Run FontWeight="Bold" Text="Full Name:               "/>
                     <Run Text="{Binding SelectedStudent.FullName, Mode=OneWay}" />
                 </TextBlock>
 
-                <TextBlock Visibility="{DynamicResource UserInfoVisibility}" Grid.Row="2">
+                <TextBlock Visibility="{DynamicResource UserInfoVisibility}" Grid.Row="2" Style="{StaticResource TextStyle}">
                     <Run FontWeight="Bold"  Text="Age:                         "/>
                     <Run Text="{Binding SelectedStudent.Age, Mode=OneWay}"/>
                 </TextBlock>
 
-                <TextBlock Visibility="{DynamicResource UserInfoVisibility}" Grid.Row="3">
+                <TextBlock Visibility="{DynamicResource UserInfoVisibility}" Grid.Row="3" Style="{StaticResource TextStyle}">
                     <Run FontWeight="Bold" Text="Average Mark:        "/>
-                    <Run Text="{Binding SelectedStudent.AvgScore}"/>
+                    <Run Text="{Binding SelectedStudent.AvgScore, StringFormat=#}"/>
                 </TextBlock>
 
             </Grid>

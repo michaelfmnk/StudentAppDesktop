@@ -96,13 +96,4 @@ namespace StudentAppDesktop
         }
     }
 
-    public static class StudentEditCommands
-    {
-        public static RoutedUICommand Escape = new RoutedUICommand("Escape",
-            "Escape", typeof(MainWindow), new InputGestureCollection() { new KeyGesture(Key.Escape) });
-
-        public static RoutedUICommand Submit = new RoutedUICommand("Submit",
-            "Submit", typeof(MainWindow), new InputGestureCollection() { new KeyGesture(Key.Enter) });
-    }
-
 }

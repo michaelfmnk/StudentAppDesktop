@@ -1,4 +1,6 @@
 ﻿using StudentAppDesktop.List;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -13,7 +15,14 @@ namespace StudentAppDesktop
 
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private Student selectedStudent;
+
+        private NamedCustomLinkedList<Student> currentList;
+        private ObservableCollection<Student> observableStudentList = new ObservableCollection<Student> { };
+
+        private List<NamedCustomLinkedList<NamedCustomLinkedList<Student>>> uni;
 
         public Student SelectedStudent
         {
@@ -25,8 +34,6 @@ namespace StudentAppDesktop
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private ObservableCollection<Student> observableStudentList = new ObservableCollection<Student> { };
         public ObservableCollection<Student> ObservableStudentList
         {
             get { return observableStudentList; }
@@ -37,10 +44,19 @@ namespace StudentAppDesktop
             }
         }
 
-        private readonly CustomLinkedList<Student> list = new CustomLinkedList<Student>();
 
         public MainWindow()
         {
+            uni = new List<NamedCustomLinkedList<NamedCustomLinkedList<Student>>>();
+
+            var defaultFaculty = new NamedCustomLinkedList<NamedCustomLinkedList<Student>>("Default faculty");
+            var defaultGroup = new NamedCustomLinkedList<Student>("Default List");
+
+            defaultFaculty.PushToEnd(defaultGroup);
+            uni.Add(defaultFaculty);
+
+            currentList = defaultGroup;
+
             InitializeComponent();
             DataContext = this;
             Refresh();
@@ -49,16 +65,16 @@ namespace StudentAppDesktop
         public void Refresh()
         {
             observableStudentList.Clear();
-            list.Sort();
+            currentList.Sort();
 
-            foreach (var student in list)
+            foreach (var student in currentList)
             {
                 observableStudentList.Add(student);
             }
 
             if (observableStudentList.Count != 0)
             {
-                SelectedStudent = list.Get(0);
+                SelectedStudent = currentList.Get(0);
                 Resources["UserInfoVisibility"] = Visibility.Visible;
                 Resources["BannerVisibility"] = Visibility.Hidden;
                 Resources["EditButtonsEnabled"] = true;
@@ -97,7 +113,7 @@ namespace StudentAppDesktop
             fontDialog.MaxSize = 14;
             if (fontDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                Resources["fontSize"] = (double) fontDialog.Font.Size;
+                Resources["fontSize"] = (double)fontDialog.Font.Size;
 
                 var tempFamily = fontDialog.Font.Name;
 
@@ -125,14 +141,14 @@ namespace StudentAppDesktop
             sf.Resources["fontSize"] = Resources["fontSize"];
             if (sf.ShowDialog() ?? false)
             {
-                list.PushToEnd(new Student(sf.FirstName, sf.LastName, sf.MiddleName, sf.YearOfBirth, sf.AvgScore));
+                currentList.PushToEnd(new Student(sf.FirstName, sf.LastName, sf.MiddleName, sf.YearOfBirth, sf.AvgScore));
                 Refresh();
             }
         }
 
         private void DeleteAllStudents(object sender, RoutedEventArgs e)
         {
-            list.Clear();
+            currentList.Clear();
             Refresh();
         }
 
@@ -140,7 +156,7 @@ namespace StudentAppDesktop
         {
             if (selectedStudent is object)
             {
-                list.DeleteFirst(selectedStudent);
+                currentList.DeleteFirst(selectedStudent);
                 Refresh();
             }
         }
@@ -148,7 +164,7 @@ namespace StudentAppDesktop
         private void UpdateSelectedStudent(object sender, RoutedEventArgs e)
         {
             var sf = new StudentEdit(selectedStudent);
-            
+
             if (sf.ShowDialog() ?? false)
             {
                 selectedStudent.FirstName = sf.FirstName;
@@ -156,6 +172,9 @@ namespace StudentAppDesktop
                 selectedStudent.MiddleName = sf.MiddleName;
                 selectedStudent.AvgScore = sf.AvgScore;
                 selectedStudent.BirthYear = sf.YearOfBirth;
+
+                // onPropertyChanged must be invoked
+                SelectedStudent = selectedStudent;
                 Refresh();
             }
         }
@@ -165,7 +184,7 @@ namespace StudentAppDesktop
             var inputText = ((System.Windows.Controls.TextBox)sender).Text.ToLower();
             for (var i = 0; i < observableStudentList.Count; i++)
             {
-                
+
                 if (observableStudentList[i].FullName.ToLower().Contains(inputText))
                 {
                     SelectedStudent = observableStudentList[i];
@@ -173,11 +192,24 @@ namespace StudentAppDesktop
                 }
             }
         }
+
+        private void ChooseGroup(object sender, RoutedEventArgs e)
+        {
+            var gs = new GroupSelect(uni);
+            gs.Resources["fontColor"] = Resources["fontColor"];
+            gs.Resources["fontFamily"] = Resources["fontFamily"];
+            gs.Resources["fontBold"] = Resources["fontBold"];
+            gs.Resources["fontSize"] = Resources["fontSize"];
+
+            gs.ShowDialog();
+            currentList = gs.SelectedGroup ?? currentList;
+            Refresh();
+        }
     }
 
     public static class CustomCommands
     {
-        public static RoutedUICommand ShowAbout = new RoutedUICommand("ShowAbout", 
+        public static RoutedUICommand ShowAbout = new RoutedUICommand("ShowAbout",
             "ShowAbout", typeof(MainWindow), new InputGestureCollection() { new KeyGesture(Key.F1) });
 
         public static RoutedUICommand ChooseFontColor = new RoutedUICommand("ChooseFontColor",
@@ -200,5 +232,14 @@ namespace StudentAppDesktop
 
         public static RoutedUICommand DeleteAllStudents = new RoutedUICommand("DeleteAllStudents",
             "DeleteAllStudents", typeof(MainWindow), new InputGestureCollection() { new KeyGesture(Key.Delete, ModifierKeys.Shift) });
+
+        public static RoutedUICommand UniExplorer = new RoutedUICommand("UniExplorer",
+            "UniExplorer", typeof(MainWindow), new InputGestureCollection() { new KeyGesture(Key.G, ModifierKeys.Control) });
+
+        public static RoutedUICommand Escape = new RoutedUICommand("Escape", 
+            "Escape", typeof(MainWindow), new InputGestureCollection() { new KeyGesture(Key.Escape) });
+
+        public static RoutedUICommand Submit = new RoutedUICommand("Submit",
+            "Submit", typeof(MainWindow), new InputGestureCollection() { new KeyGesture(Key.Enter) });
     }
 }

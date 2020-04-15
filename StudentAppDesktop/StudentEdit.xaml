@@ -7,15 +7,15 @@
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="Student Form"
+        Title="Student Profile"
         Height="300"
         Width="350"
         ResizeMode="NoResize"
         Icon="/Icons/studens.ico"
         FocusManager.FocusedElement="{Binding ElementName=FirstNameInput}">
     <Window.CommandBindings>
-        <CommandBinding Command="local:StudentEditCommands.Escape" Executed="Cancel_Click" />
-        <CommandBinding Command="local:StudentEditCommands.Submit" Executed="OK_Click" />
+        <CommandBinding Command="local:CustomCommands.Escape" Executed="Cancel_Click" />
+        <CommandBinding Command="local:CustomCommands.Submit" Executed="OK_Click" />
     </Window.CommandBindings>
     <Window.Resources>
         <Style TargetType="{x:Type Label}" x:Key="LabelStyle">
@@ -116,8 +116,8 @@
             </Grid>
         </Grid>
         <Grid Grid.Row="10">
-            <Button x:Name="OK" Content="OK" Width="175" Height="29" Margin="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="OK_Click"/>
-            <Button x:Name="Cancel" Content="Cancel" Height="29" Width="175" Margin="0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="Cancel_Click"/>
+            <Button x:Name="OK" Content="OK" Width="175" Height="29" Margin="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="OK_Click" Style="{StaticResource ControlStyle}"/>
+            <Button x:Name="Cancel" Content="Cancel" Height="29" Width="175" Margin="0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="Cancel_Click" Style="{StaticResource ControlStyle}"/>
         </Grid>
     </Grid>
 </Window>
