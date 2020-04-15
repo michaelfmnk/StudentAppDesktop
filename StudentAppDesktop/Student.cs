@@ -21,6 +21,8 @@ namespace StudentAppDesktop
 
         public string FullName => $"{FirstName} {MiddleName} {LastName}";
 
+        public int Age => DateTime.Now.Year - BirthYear;
+
         public object Clone()
         {
             return new Student(FirstName, LastName, MiddleName, BirthYear, AvgScore);

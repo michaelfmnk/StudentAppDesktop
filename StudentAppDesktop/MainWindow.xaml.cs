@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using StudentAppDesktop.List;
+﻿using StudentAppDesktop.List;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -15,6 +14,7 @@ namespace StudentAppDesktop
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private Student selectedStudent;
+
         public Student SelectedStudent
         {
             get { return selectedStudent; }
@@ -43,7 +43,6 @@ namespace StudentAppDesktop
         {
             InitializeComponent();
             DataContext = this;
-            list.AddAll(new Student("A", "B", "C", 1990));
             Refresh();
         }
 
@@ -59,14 +58,16 @@ namespace StudentAppDesktop
 
             if (observableStudentList.Count != 0)
             {
-                selectedStudent = list.Get(0);
-                Resources["selected"] = Visibility.Visible;
-                Resources["deselected"] = Visibility.Hidden;
+                SelectedStudent = list.Get(0);
+                Resources["UserInfoVisibility"] = Visibility.Visible;
+                Resources["BannerVisibility"] = Visibility.Hidden;
+                Resources["EditButtonsEnabled"] = true;
             }
             else
             {
-                Resources["selected"] = Visibility.Hidden;
-                Resources["deselected"] = Visibility.Visible;
+                Resources["UserInfoVisibility"] = Visibility.Hidden;
+                Resources["BannerVisibility"] = Visibility.Visible;
+                Resources["EditButtonsEnabled"] = false;
             }
         }
 
@@ -139,7 +140,7 @@ namespace StudentAppDesktop
         {
             if (selectedStudent is object)
             {
-                list.Delete(selectedStudent);
+                list.DeleteFirst(selectedStudent);
                 Refresh();
             }
         }

@@ -7,8 +7,6 @@ namespace StudentAppDesktop
 {
     public partial class StudentEdit : Window
     {
-        private Student selectedStudent;
-
         public ushort CurrentYear { get; } = (ushort) DateTime.Now.Year;
         public string FirstName { get; private set; }
         public string MiddleName { get; private set; }
@@ -24,7 +22,6 @@ namespace StudentAppDesktop
 
         public StudentEdit(Student selectedStudent) : this()
         {
-            this.selectedStudent = selectedStudent;
             this.FirstNameInput.Text = selectedStudent.FirstName;
             this.LastNameInput.Text = selectedStudent.LastName;
             this.MiddleNameInput.Text = selectedStudent.MiddleName;
